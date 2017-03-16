@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Calculator</string>
+
+    <!--STRINGS RELATED TO MAIN ACTIVITY-->
+    <string name="simple_btn">Simple</string>
+    <string name="advanced_btn">Advanced</string>
+    <string name="about_btn">About</string>
+    <string name="exit_btn">Exit</string>
+
+    <!--STRINGS RELATED TO ABOUT ACTIVITY-->
+    <string name="about_txt">About application</string>
+    <string name="about_info_txt">This app was developed by ME :)</string>
+
+</resources>
