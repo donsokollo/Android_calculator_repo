@@ -14,12 +14,25 @@ public class SimpleActivity extends AppCompatActivity {
 
 
 
-    private TextView mSimpledisplayText;
-    private TextView mSimpleSmalldisplayText;
+    private TextView mSimpDisplay;
+    private TextView mSimpSmallDisplay;
 
+    public void setmSimpDisplay(String setter){
+        mSimpDisplay.setText(setter);
+    }
+    public void clearmSimpDisplay(){
+        mSimpDisplay.setText("");
+    }
+    public String getmSimpDisplay(){
+        return this.mSimpDisplay.getText().toString();
+    }
 
-
-
+    public void setmSimpSmallDisplay(String setter){
+        mSimpSmallDisplay.setText(setter);
+    }
+    public String getmSimpSmallDisplay(){
+        return this.mSimpSmallDisplay.getText().toString();
+    }
 
     private Stack<StackItem> stack = new Stack<>();
 
@@ -35,50 +48,45 @@ public class SimpleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_calculator);
 
-        logic = new CalcLogic();
+        logic = new CalcLogic(this);
 
 
-
-        mSimpledisplayText = (TextView) findViewById(R.id.simple_displayText);
-        mSimpleSmalldisplayText = (TextView) findViewById(R.id.simple_smalldisplayText);
-
+        mSimpDisplay = (TextView) findViewById(R.id.simple_displayText);
+        mSimpSmallDisplay = (TextView) findViewById(R.id.simple_smalldisplayText);
 
 
-        mSimpleBkspBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            if(mSimpledisplayText.getText().toString().length()>1){
-                mSimpledisplayText.setText(mSimpledisplayText.getText().toString()
-                        .substring(0,mSimpledisplayText.getText().toString().length()-1));
-            } else mSimpledisplayText.setText("");
-
-            }
-        });
+    }
 
 
+    public void onBkspClick(View v){
+        Button btn = (Button) v;
+        logic.clearLastDigit();
+    }
 
+    public void onSimpleCclick(View v){
+        Button btn = (Button) v;
+        logic.clearAll();
+    }
+
+    public void onOperatorClick(View v){
+        Button btn = (Button) v;
+        logic.makeOperation(((Button) v).getText().toString());
+    }
 
 
 
         public void onNumberClick(View v) {
             Button btn = (Button) v;
-            if (btn.getText().equals(".")){
-                if(logic.firstDot()){
-                    logic.addDigit((String) btn.getText());
-                } else ;
-                mSimpledisplayText.setText(btn.getText());
-            }else{
-                logic.addDigit(btn.getText().toString());
-            }
+            logic.addDigit(btn.getText().toString());
         }
 
 
 
 
 
-    }
-
-
-
-
 }
+
+
+
+
+
