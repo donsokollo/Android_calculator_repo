@@ -173,7 +173,7 @@
             android:id="@+id/simple_equal_btn"
             android:text="="
             android:layout_rowWeight="1"
-            android:onClick="onEqualClick"/>
+            android:onClick="onOperatorClick"/>
         <Button
             android:id="@+id/simple_plus_btn"
             android:text="+"

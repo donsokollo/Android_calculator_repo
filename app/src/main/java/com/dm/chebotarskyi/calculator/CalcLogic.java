@@ -55,12 +55,17 @@ public class CalcLogic {
         public String getNumber(){
             return this.number;
         }
+        public void setNumber(String number){this.number=number;}
 
         public Number makeNumber(){
-            float fullNumb = Float.parseFloat(number);
-            Number numb = new Number(fullNumb);
-            clearNumber();
-            return numb;
+            if (number.equals("0.")){
+                return new Number(0);
+            } else {
+                float fullNumb = Float.parseFloat(number);
+                Number numb = new Number(fullNumb);
+                clearNumber();
+                return numb;
+            }
         }
 
         public void clearNumber(){
@@ -70,14 +75,7 @@ public class CalcLogic {
 
     }
 
-    public boolean firstDot(){
-        if (numb.firstDot()){
-            return true;
-        } else {
-            numb.addDot();
-            return false;
-        }
-    }
+
 
     public void setDispText(){
        String simSmallDisp = "";
@@ -94,13 +92,22 @@ public class CalcLogic {
         }
     }
 
+    public void makeFun(String fun){
+        //to do!!!!!!!!!!!
+    }
+
     public void addDigit(String digit){
+        if (!stack.isEmpty() && stack.peek().isNumber()){
+            stack.pop();  //if after "=" sign we enter new number it vanishes
+            lastOpPriority=0;
+        }
         if (digit.equals(".")){
             if(numb.firstDot()){
-                numb.addDot();
                 if (numb.getNumber().isEmpty()){
-                    act.setmSimpDisplay("0"+digit);
-                } else act.setmSimpDisplay(digit);
+                    numb.addDigit("0");
+                }
+                numb.addDot();
+                act.setmSimpDisplay(numb.getNumber());
             }
         } else {
             numb.addDigit(digit);
@@ -114,7 +121,7 @@ public class CalcLogic {
     }
 
     public void clearLastDigit(){
-        if (!act.getmSimpDisplay().isEmpty()){
+        if (!act.getmSimpDisplay().isEmpty() && !numb.getNumber().isEmpty()){
             numb.subDigit();
             act.setmSimpDisplay(act.getmSimpDisplay().substring(0,act.getmSimpDisplay().length()-1));
         }
@@ -124,15 +131,17 @@ public class CalcLogic {
     public void clearAll(){
         numb.clearNumber();
         stack.clear();
+        this.lastOpPriority=0;
         act.setmSimpDisplay("");
         act.setmSimpSmallDisplay("");
     }
+
 
     private void simplifyStack(Operator op, boolean simplifyAll) {
 
         boolean stackEmpty = false;
 
-        while ( (!stackEmpty && lastOpPriority >= op.checkPriority()) || (!stackEmpty && simplifyAll) ) {
+        while (  (!stackEmpty && simplifyAll) || (!stackEmpty && lastOpPriority >= op.checkPriority())) {
 
             String firstNumb = stack.pop().getItem();//nummb
             String lastOper = stack.pop().getItem();//oper
@@ -167,27 +176,51 @@ public class CalcLogic {
 
             setDispText();
         }
-        if (stackEmpty) {
+        if (stackEmpty && !simplifyAll) {
 
             stack.push(op);//!!!!!???
         }
     }
 
+    public void negateCurrNumb() {
+        if (!numb.getNumber().isEmpty()) {
+            numb.setNumber(
+                    Float.toString(-1 * Float.parseFloat(numb.getNumber()))
+            );
+            act.setmSimpDisplay(numb.getNumber());
+        } else if (!stack.isEmpty() && stack.peek().isNumber()){
+            numb.setNumber(
+                    Float.toString(-1 * Float.parseFloat(stack.pop().getItem()))
+                    );
+            act.setmSimpDisplay(numb.getNumber());
+            lastOpPriority=0;
+        }
+
+    }
 
         public void makeOperation(String operator){
 
-       // String pobranyTekst = mWyswietlacz.getText().toString();
         Operator op = new Operator(operator); //making operator
 
-        if (numb.getNumber().isEmpty()){
-            //do nothing
+        if (op.getItem().equals("=")){
+            if (!stack.isEmpty()){
+                if (!numb.getNumber().isEmpty()){
+                    stack.push(makeNumb());
+                    simplifyStack(new Operator("^"), true);
+                }
+
+            }
+        } else if (numb.getNumber().isEmpty()){
+            if (!stack.isEmpty() ){
+                if(stack.peek().isNumber()){
+                    stack.push(op);
+                    lastOpPriority=op.checkPriority();
+                }
+            }
         } else if (lastOpPriority >= op.checkPriority()) {
             stack.push(makeNumb());
 
                 simplifyStack(op, false);
-
-
-
 
         }   else if(lastOpPriority < op.checkPriority()){
 

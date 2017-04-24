@@ -53,12 +53,10 @@ public class SimpleActivity extends AppCompatActivity {
 
 
     public void onBkspClick(View v){
-        Button btn = (Button) v;
         logic.clearLastDigit();
     }
 
     public void onSimpleCclick(View v){
-        Button btn = (Button) v;
         logic.clearAll();
     }
 
@@ -67,6 +65,9 @@ public class SimpleActivity extends AppCompatActivity {
         logic.makeOperation(((Button) v).getText().toString());
     }
 
+    public void onPmClick(View v) {
+        logic.negateCurrNumb();
+    }
 
 
         public void onNumberClick(View v) {
