@@ -70,11 +70,13 @@
            android:text="9"
            android:layout_rowWeight="1"
            android:onClick="onNumberClick"/>
+
        <Button
-           android:id="@+id/simple_div_btn"
+           android:id="@+id/simple_ln_btn"
            android:text="/"
            android:layout_rowWeight="1"
            android:onClick="onOperatorClick"/>
+
        <Button
            android:id="@+id/simple_4_btn"
            android:text="4"

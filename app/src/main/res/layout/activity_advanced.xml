@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_advanced"
     android:layout_width="match_parent"
@@ -8,6 +8,182 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.dm.chebotarskyi.calculator.AdvancedActivity">
 
-</RelativeLayout>
+
+    <TextView
+        android:id="@+id/simple_displayText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_gravity="end"
+        android:textAlignment="textEnd"
+        android:textSize="36sp"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/simple_smalldisplayText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_gravity="end"
+        android:textAlignment="textEnd"
+        android:textSize="36sp"
+        android:text=""/>
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:rowCount="5"
+        android:columnCount="4">
+
+        <Button
+            android:id="@+id/simple_bksp_btn"
+            android:text="Bksp"
+            android:layout_rowWeight="1"
+            android:onClick="onBkspClick"/>
+        <Button
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill_horizontal"
+            android:id="@+id/simple_C_btn"
+            android:text="C"
+            android:layout_rowWeight="1"
+            android:onClick="onSimpleCclick"/>
+        <Button
+            android:id="@+id/simple_pm_btn"
+            android:text="+-"
+            android:layout_rowWeight="1"
+            android:onClick="onPmClick"/>
+        <Button
+            android:id="@+id/simple_sin_btn"
+            android:text="sin"
+            android:layout_rowWeight="1"
+            android:onClick="onFunClick"/>
+        <Button
+            android:id="@+id/simple_cos_btn"
+            android:text="cos"
+            android:layout_rowWeight="1"
+            android:onClick="onFunClick"/>
+        <Button
+            android:id="@+id/simple_tan_btn"
+            android:text="tan"
+            android:layout_rowWeight="1"
+            android:onClick="onFunClick"/>
+        <Button
+            android:id="@+id/simple_ln_btn"
+            android:text="ln"
+            android:layout_rowWeight="1"
+            android:onClick="onFunClick"/>
+        <Button
+            android:id="@+id/simple_sqrt_btn"
+            android:text="sqrt"
+            android:layout_rowWeight="1"
+            android:onClick="onFunClick"/>
+
+        <Button
+            android:id="@+id/simple_x2_btn"
+            android:text="x^2"
+            android:layout_rowWeight="1"
+            android:onClick="onFunClick"/>
+        <Button
+            android:id="@+id/simple_xy_btn"
+            android:text="x^y"
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+        <Button
+            android:id="@+id/simple_log_btn"
+            android:text="log"
+            android:layout_rowWeight="1"
+            android:onClick="onOperatorClick"/>
+        <Button
+            android:id="@+id/simple_7_btn"
+            android:text="7"
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+
+
+        <Button
+            android:id="@+id/simple_8_btn"
+            android:text="8"
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+        <Button
+            android:id="@+id/simple_9_btn"
+            android:text="9"
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+        <Button
+            android:id="@+id/simple_div_btn"
+            android:text="/"
+            android:layout_rowWeight="1"
+            android:onClick="onOperatorClick"/>
+        <Button
+            android:id="@+id/simple_4_btn"
+            android:text="4"
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+        <Button
+            android:id="@+id/simple_5_btn"
+            android:text="5"
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+        <Button
+            android:id="@+id/simple_6_btn"
+            android:text="6"
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+        <Button
+            android:id="@+id/simple_mul_btn"
+            android:text="*"
+            android:layout_rowWeight="1"
+            android:onClick="onOperatorClick"/>
+        <Button
+            android:id="@+id/simple_1_btn"
+            android:text="1"
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+        <Button
+            android:id="@+id/simple_2_btn"
+            android:text="2"
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+        <Button
+            android:id="@+id/simple_3_btn"
+            android:text="3"
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+        <Button
+            android:id="@+id/simple_sub_btn"
+            android:text="-"
+            android:layout_rowWeight="1"
+            android:onClick="onOperatorClick"/>
+        <Button
+            android:id="@+id/simple_0_btn"
+            android:text="0"
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+        <Button
+            android:id="@+id/simple_dot_btn"
+            android:text="."
+            android:layout_rowWeight="1"
+            android:onClick="onNumberClick"/>
+        <Button
+            android:id="@+id/simple_equal_btn"
+            android:text="="
+            android:layout_rowWeight="1"
+            android:onClick="onEqualClick"/>
+        <Button
+            android:id="@+id/simple_plus_btn"
+            android:text="+"
+            android:layout_rowWeight="1"
+            android:onClick="onOperatorClick"/>
+
+
+
+    </GridLayout>
+
+
+
+    </LinearLayout>

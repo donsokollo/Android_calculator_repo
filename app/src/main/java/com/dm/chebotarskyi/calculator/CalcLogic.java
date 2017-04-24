@@ -1,6 +1,7 @@
 package com.dm.chebotarskyi.calculator;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.ArrayDeque;
 
@@ -16,20 +17,19 @@ public class CalcLogic {
 
     private ArrayDeque<StackItem> stack= new ArrayDeque<StackItem>();
     private SimpleActivity act;
+    private AdvancedActivity actA;
     private int lastOpPriority =0;
 
 
 
-    public  CalcLogic(){
-        CurrNumber Numb = new CurrNumber();
-        SimpleActivity act = new SimpleActivity();
-    }
 
     public  CalcLogic(SimpleActivity Act){
         this.act = Act;
     }
 
-
+    public  CalcLogic(AdvancedActivity Act){
+        this.actA = Act;
+    }
     /*
     uzyc ArrayDeque na stack!!!
 
@@ -79,18 +79,32 @@ public class CalcLogic {
         }
     }
 
+    public void setDispText(){
+       String simSmallDisp = "";
+        Iterator<StackItem>  it= stack.descendingIterator();
+
+        while (it.hasNext()  ){
+            StackItem temp =it.next();
+            simSmallDisp+=temp.getItem();
+
+        }
+        act.setmSimpSmallDisplay(simSmallDisp);
+        if (stack.peek().isNumber()){
+            act.setmSimpDisplay(stack.peek().getItem());
+        }
+    }
+
     public void addDigit(String digit){
         if (digit.equals(".")){
             if(numb.firstDot()){
                 numb.addDot();
                 if (numb.getNumber().isEmpty()){
                     act.setmSimpDisplay("0"+digit);
-                } else act.setmSimpDisplay(act.getmSimpDisplay()+digit);
+                } else act.setmSimpDisplay(digit);
             }
-
         } else {
             numb.addDigit(digit);
-            act.setmSimpDisplay(act.getmSimpDisplay()+digit);
+            act.setmSimpDisplay(numb.getNumber());
         }
 
     }
@@ -114,55 +128,78 @@ public class CalcLogic {
         act.setmSimpSmallDisplay("");
     }
 
+    private void simplifyStack(Operator op, boolean simplifyAll) {
+
+        boolean stackEmpty = false;
+
+        while ( (!stackEmpty && lastOpPriority >= op.checkPriority()) || (!stackEmpty && simplifyAll) ) {
+
+            String firstNumb = stack.pop().getItem();//nummb
+            String lastOper = stack.pop().getItem();//oper
+            String secondNumb = stack.pop().getItem(); //numb
+
+            if (stack.isEmpty()) {
+
+                stackEmpty = true;
+            }
 
 
-    public void makeOperation(String operator){
+            Number res = new Number();
+            switch (lastOper) {
+                case "-":
+                    res.setNumber(Float.parseFloat(secondNumb) - Float.parseFloat(firstNumb));
+                    break;
+                case "+":
+                    res.setNumber(Float.parseFloat(secondNumb) + Float.parseFloat(firstNumb));
+                    break;
+                case "*":
+                    res.setNumber(Float.parseFloat(secondNumb) * Float.parseFloat(firstNumb));
+                    break;
+                case "/":
+                    res.setNumber(Float.parseFloat(secondNumb) / Float.parseFloat(firstNumb));
+                    break;
+            }
+
+
+            stack.push(res);
+            this.lastOpPriority = op.checkPriority();
+
+
+            setDispText();
+        }
+        if (stackEmpty) {
+
+            stack.push(op);//!!!!!???
+        }
+    }
+
+
+        public void makeOperation(String operator){
 
        // String pobranyTekst = mWyswietlacz.getText().toString();
         Operator op = new Operator(operator); //making operator
 
         if (numb.getNumber().isEmpty()){
             //do nothing
-        } else if (lastOpPriority > op.checkPriority()) {
+        } else if (lastOpPriority >= op.checkPriority()) {
             stack.push(makeNumb());
 
-            while (lastOpPriority > op.checkPriority()) {
-                float firstNumb = stack.pollLast().getNumber();
-                String lastOper = stack.pollLast().getOperator();
-                float secondNumb = stack.pollLast().getNumber();
-
-                if (stack.isEmpty()) {
-                    this.lastOpPriority = 0;
-                } else this.lastOpPriority = stack.peekLast().checkPriority();
+                simplifyStack(op, false);
 
 
-                Number res = new Number();
-                switch (lastOper) {
-                    case "-":
-                        res.setNumber(secondNumb - firstNumb);
-                        break;
-                    case "+":
-                        res.setNumber(secondNumb + firstNumb);
-                        break;
-                    case "*":
-                        res.setNumber(secondNumb * firstNumb);
-                        break;
-                    case "/":
-                        res.setNumber(secondNumb / firstNumb);
-                        break;
-                }
 
-                stack.addLast(res);
-                act.setmSimpDisplay(Float.toString(res.getNumber()));
-            }
-        }   else if(lastOpPriority <= op.checkPriority()){
-            act.clearmSimpDisplay();
+
+        }   else if(lastOpPriority < op.checkPriority()){
+
             stack.push(makeNumb());
-            act.setmSimpSmallDisplay(act.getmSimpSmallDisplay() + Float.toString(stack.peek().getNumber()));
+            act.setmSimpDisplay(stack.peek().getItem()); //setting the regular display
             stack.push(op);
-            act.setmSimpSmallDisplay(act.getmSimpSmallDisplay() + stack.peek().getOperator());
             lastOpPriority = op.checkPriority();
+            setDispText();
+
+
         }
+
 
 
 

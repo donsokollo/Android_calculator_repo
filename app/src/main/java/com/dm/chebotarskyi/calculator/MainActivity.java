@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
         mAdvancedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: add advanced calculator activity
+                Intent intent = new Intent(MainActivity.this, SimpleActivity.class);
+                startActivity(intent);
             }
         });
 

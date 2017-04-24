@@ -34,14 +34,8 @@ public class SimpleActivity extends AppCompatActivity {
         return this.mSimpSmallDisplay.getText().toString();
     }
 
-    private Stack<StackItem> stack = new Stack<>();
-
-    private ArrayList stackList = new ArrayList();
     private CalcLogic logic;
 
-    public Stack<StackItem> getStack() {
-        return stack;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
