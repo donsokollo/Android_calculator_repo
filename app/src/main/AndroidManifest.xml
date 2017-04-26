@@ -20,7 +20,8 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SimpleActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
         <activity
             android:name=".AdvancedActivity"
             android:parentActivityName=".MainActivity"/>

@@ -24,7 +24,14 @@
         android:id="@+id/info_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
-        android:text="@string/about_info_txt"/>
+        android:text="This is an calculator app with a separated logic
+and a stack of numbers  and operators.
+The current number is shown on the top
+and the stack on the bottom of the
+display part.\n
+    Made by Damian Sokołowski\n
+    sokolowski.dmn@gmail.com"/>
 
 </RelativeLayout>

@@ -11,147 +11,133 @@ import java.util.ArrayDeque;
  */
 
 
-
 public class CalcLogic {
     private CurrNumber numb = new CurrNumber();
-
-    private ArrayDeque<StackItem> stack= new ArrayDeque<StackItem>();
-    private SimpleActivity act;
-    private AdvancedActivity actA;
-    private int lastOpPriority =0;
+    private ArrayDeque<StackItem> stack = new ArrayDeque<StackItem>();
+    private int lastOpPriority = 0;
 
 
-
-
-    public  CalcLogic(SimpleActivity Act){
-        this.act = Act;
-    }
-
-    public  CalcLogic(AdvancedActivity Act){
-        this.actA = Act;
-    }
-    /*
-    uzyc ArrayDeque na stack!!!
-
-     */
-
-    class CurrNumber{
-
-        boolean dotPresent=false;
-        String number = "";
-
-        public boolean firstDot(){
-            return !this.dotPresent;
-        }
-        public void addDot(){
-            dotPresent=true;
-            number+=".";        }
-        public void addDigit(String digit){
-            number+=digit;
-        }
-        public void subDigit(){
-            number=number.substring(0,number.length()-1);
-        }
-        public String getNumber(){
-            return this.number;
-        }
-        public void setNumber(String number){this.number=number;}
-
-        public Number makeNumber(){
-            if (number.equals("0.")){
-                return new Number(0);
-            } else {
-                float fullNumb = Float.parseFloat(number);
-                Number numb = new Number(fullNumb);
-                clearNumber();
-                return numb;
-            }
-        }
-
-        public void clearNumber(){
-            this.number="";
-            this.dotPresent=false;
-        }
-
+    public CalcLogic() {
     }
 
 
+    public String[] setDispText() {
+        String simSmallDisp = "";
+        String simDisp = "";
+        Iterator<StackItem> it = stack.descendingIterator();
 
-    public void setDispText(){
-       String simSmallDisp = "";
-        Iterator<StackItem>  it= stack.descendingIterator();
-
-        while (it.hasNext()  ){
-            StackItem temp =it.next();
-            simSmallDisp+=temp.getItem();
+        while (it.hasNext()) {
+            StackItem temp = it.next();
+            simSmallDisp += temp.getItem();
 
         }
-        act.setmSimpSmallDisplay(simSmallDisp);
-        if (stack.peek().isNumber()){
-            act.setmSimpDisplay(stack.peek().getItem());
+        if (!numb.getNumber().isEmpty()) {
+            simDisp = numb.getNumber();
+        } else if (!stack.isEmpty() && stack.peek().isNumber()) {
+            simDisp = stack.peek().getItem();
         }
+        return new String[]{simDisp, simSmallDisp};
     }
 
-    public void makeFun(String fun){
-        //to do!!!!!!!!!!!
+    private void calcFun(String fun, float num) {
+        float res = 0;
+        boolean validOp = true;
+        switch (fun) {
+            case "sin":
+                res = (float) Math.sin(num);
+                break;
+            case "cos":
+                res = (float) Math.cos(num);
+                break;
+            case "log":
+                if (num >= 0) {
+                    res = (float) Math.log10(num);
+                } else validOp = false;
+                break;
+            case "ln":
+                if (num >= 0) {
+                    res = (float) Math.log(num);
+                } else validOp = false;
+                break;
+            case "x^2":
+                res = (float) Math.pow(num, 2);
+                break;
+            case "sqrt":
+                if (num >= 0) {
+                    res = (float) Math.sqrt(num);
+                } else validOp = false;
+                break;
+            case "tan":
+                if (num % 2 != Math.PI) {
+                    res = (float) Math.sqrt(num);
+                } else validOp = false;
+                break;
+        }
+
+        if (validOp) {
+            stack.push(new Number(res));
+        } else numb.setNumber(Float.toString(num));
+
     }
 
-    public void addDigit(String digit){
-        if (!stack.isEmpty() && stack.peek().isNumber()){
+
+    public void makeFun(String fun) {
+        float num = 0;
+
+        if (!numb.getNumber().isEmpty()) {
+            num = Float.parseFloat(numb.getNumber());
+            numb.clearNumber();
+            calcFun(fun, num);
+        } else if (!stack.isEmpty() && stack.peek().isNumber()) {
+            num = Float.parseFloat(stack.pop().getItem());
+            calcFun(fun, num);
+        }
+
+    }
+
+    public void addDigit(String digit) {
+        if (!stack.isEmpty() && stack.peek().isNumber()) {
             stack.pop();  //if after "=" sign we enter new number it vanishes
-            lastOpPriority=0;
+            lastOpPriority = 0;
         }
-        if (digit.equals(".")){
-            if(numb.firstDot()){
-                if (numb.getNumber().isEmpty()){
+        if (digit.equals(".")) {
+            if (numb.firstDot()) {
+                if (numb.getNumber().isEmpty()) {
                     numb.addDigit("0");
                 }
                 numb.addDot();
-                act.setmSimpDisplay(numb.getNumber());
             }
         } else {
             numb.addDigit(digit);
-            act.setmSimpDisplay(numb.getNumber());
         }
-
     }
 
-    public  Number makeNumb(){
-        return  numb.makeNumber();
+    public Number makeNumb() {
+        return numb.makeNumber();
     }
 
-    public void clearLastDigit(){
-        if (!act.getmSimpDisplay().isEmpty() && !numb.getNumber().isEmpty()){
+    public void clearLastDigit() {
+        if (!numb.getNumber().isEmpty()) {
             numb.subDigit();
-            act.setmSimpDisplay(act.getmSimpDisplay().substring(0,act.getmSimpDisplay().length()-1));
         }
-
     }
 
-    public void clearAll(){
+    public void clearAll() {
         numb.clearNumber();
         stack.clear();
-        this.lastOpPriority=0;
-        act.setmSimpDisplay("");
-        act.setmSimpSmallDisplay("");
+        this.lastOpPriority = 0;
     }
 
 
     private void simplifyStack(Operator op, boolean simplifyAll) {
-
         boolean stackEmpty = false;
-
-        while (  (!stackEmpty && simplifyAll) || (!stackEmpty && lastOpPriority >= op.checkPriority())) {
-
+        while ((!stackEmpty && simplifyAll) || (!stackEmpty && lastOpPriority >= op.checkPriority())) {
             String firstNumb = stack.pop().getItem();//nummb
             String lastOper = stack.pop().getItem();//oper
             String secondNumb = stack.pop().getItem(); //numb
-
             if (stack.isEmpty()) {
-
                 stackEmpty = true;
             }
-
 
             Number res = new Number();
             switch (lastOper) {
@@ -167,17 +153,15 @@ public class CalcLogic {
                 case "/":
                     res.setNumber(Float.parseFloat(secondNumb) / Float.parseFloat(firstNumb));
                     break;
+                case "^":
+                    res.setNumber((float) (Math.pow(Double.parseDouble(secondNumb), Double.parseDouble(firstNumb))));
+                    break;
             }
-
-
             stack.push(res);
             this.lastOpPriority = op.checkPriority();
-
-
             setDispText();
         }
         if (stackEmpty && !simplifyAll) {
-
             stack.push(op);//!!!!!???
         }
     }
@@ -187,57 +171,41 @@ public class CalcLogic {
             numb.setNumber(
                     Float.toString(-1 * Float.parseFloat(numb.getNumber()))
             );
-            act.setmSimpDisplay(numb.getNumber());
-        } else if (!stack.isEmpty() && stack.peek().isNumber()){
+
+        } else if (!stack.isEmpty() && stack.peek().isNumber()) {
             numb.setNumber(
                     Float.toString(-1 * Float.parseFloat(stack.pop().getItem()))
-                    );
-            act.setmSimpDisplay(numb.getNumber());
-            lastOpPriority=0;
+            );
+            lastOpPriority = 0;
         }
-
     }
 
-        public void makeOperation(String operator){
-
+    public void makeOperation(String operator) {
         Operator op = new Operator(operator); //making operator
 
-        if (op.getItem().equals("=")){
-            if (!stack.isEmpty()){
-                if (!numb.getNumber().isEmpty()){
+        if (op.getItem().equals("=")) {
+            if (!stack.isEmpty()) {
+                if (!numb.getNumber().isEmpty()) {
                     stack.push(makeNumb());
                     simplifyStack(new Operator("^"), true);
-                }
+                } else simplifyStack(new Operator("^"), true);
 
             }
-        } else if (numb.getNumber().isEmpty()){
-            if (!stack.isEmpty() ){
-                if(stack.peek().isNumber()){
+        } else if (numb.getNumber().isEmpty()) {
+            if (!stack.isEmpty()) {
+                if (stack.peek().isNumber()) {
                     stack.push(op);
-                    lastOpPriority=op.checkPriority();
+                    lastOpPriority = op.checkPriority();
                 }
             }
         } else if (lastOpPriority >= op.checkPriority()) {
             stack.push(makeNumb());
-
-                simplifyStack(op, false);
-
-        }   else if(lastOpPriority < op.checkPriority()){
-
+            simplifyStack(op, false);
+        } else if (lastOpPriority < op.checkPriority()) {
             stack.push(makeNumb());
-            act.setmSimpDisplay(stack.peek().getItem()); //setting the regular display
             stack.push(op);
             lastOpPriority = op.checkPriority();
             setDispText();
-
-
         }
-
-
-
-
-
-
     }
-
 }

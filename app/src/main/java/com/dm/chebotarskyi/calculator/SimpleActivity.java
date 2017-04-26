@@ -42,40 +42,48 @@ public class SimpleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_calculator);
 
-        logic = new CalcLogic(this);
-
-
+        logic = new CalcLogic();
         mSimpDisplay = (TextView) findViewById(R.id.simple_displayText);
         mSimpSmallDisplay = (TextView) findViewById(R.id.simple_smalldisplayText);
-
-
     }
 
 
     public void onBkspClick(View v){
+
         logic.clearLastDigit();
+        setDisplay();
     }
 
     public void onSimpleCclick(View v){
         logic.clearAll();
+        setDisplay();
     }
 
     public void onOperatorClick(View v){
         Button btn = (Button) v;
         logic.makeOperation(((Button) v).getText().toString());
+        setDisplay();
     }
 
     public void onPmClick(View v) {
+
         logic.negateCurrNumb();
+        setDisplay();
     }
 
 
         public void onNumberClick(View v) {
             Button btn = (Button) v;
             logic.addDigit(btn.getText().toString());
+            setDisplay();
+
         }
 
-
+    private  void setDisplay(){
+        String[] temp =logic.setDispText();
+        mSimpDisplay.setText(temp[0]);
+        mSimpSmallDisplay.setText(temp[1]);
+    }
 
 
 

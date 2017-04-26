@@ -89,14 +89,14 @@
             android:onClick="onFunClick"/>
         <Button
             android:id="@+id/simple_xy_btn"
-            android:text="x^y"
+            android:text="^"
             android:layout_rowWeight="1"
-            android:onClick="onNumberClick"/>
+            android:onClick="onOperatorClick"/>
         <Button
             android:id="@+id/simple_log_btn"
             android:text="log"
             android:layout_rowWeight="1"
-            android:onClick="onOperatorClick"/>
+            android:onClick="onFunClick"/>
         <Button
             android:id="@+id/simple_7_btn"
             android:text="7"
