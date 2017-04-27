@@ -37,6 +37,7 @@ public class CurrNumber {
 
     public Number makeNumber() {
         if (number.equals("0.")) {
+            clearNumber();
             return new Number(0);
         } else {
             float fullNumb = Float.parseFloat(number);

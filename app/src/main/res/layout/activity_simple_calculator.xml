@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_simple_calculator"
+    android:id="@+id/activity_advanced"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -9,11 +9,29 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    android:gravity="center"
-    android:rowCount="1"
-    android:columnCount="1"
-
     tools:context="com.dm.chebotarskyi.calculator.SimpleActivity">
+
+       <TextView
+           android:id="@+id/simple_displayText"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:maxLines="1"
+           android:layout_gravity="end"
+           android:textAlignment="textEnd"
+           android:textSize="36sp"
+           android:text=""/>
+
+       <TextView
+           android:id="@+id/simple_smalldisplayText"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:maxLines="1"
+           android:layout_gravity="end"
+           android:textAlignment="textEnd"
+           android:textSize="36sp"
+           android:text=""/>
+
+
 
        <GridLayout
            android:layout_width="match_parent"
@@ -23,26 +41,7 @@
            >
 
 
-       <TextView
-           android:id="@+id/simple_displayText"
-           android:layout_columnSpan="4"
-           android:layout_rowWeight="1"
-           android:maxLines="1"
-           android:layout_gravity="end"
-           android:textAlignment="textEnd"
-           android:textSize="36sp"
-           android:text=""/>
 
-       <TextView
-           android:id="@+id/simple_smalldisplayText"
-           android:layout_columnSpan="4"
-           android:layout_rowWeight="1"
-           android:layout_height="wrap_content"
-           android:maxLines="1"
-           android:layout_gravity="end"
-           android:textAlignment="textEnd"
-           android:textSize="36sp"
-           android:text=""/>
 
 
        <Button
@@ -149,4 +148,4 @@
 
        </GridLayout>
 
-</GridLayout>
+</LinearLayout>

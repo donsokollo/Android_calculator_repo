@@ -15,7 +15,7 @@ public class CalcLogic {
     private CurrNumber numb = new CurrNumber();
     private ArrayDeque<StackItem> stack = new ArrayDeque<StackItem>();
     private int lastOpPriority = 0;
-
+    private boolean wasEqualOp = false;
 
     public CalcLogic() {
     }
@@ -96,9 +96,10 @@ public class CalcLogic {
     }
 
     public void addDigit(String digit) {
-        if (!stack.isEmpty() && stack.peek().isNumber()) {
+        if (!stack.isEmpty() && stack.peek().isNumber()&& wasEqualOp) {
             stack.pop();  //if after "=" sign we enter new number it vanishes
             lastOpPriority = 0;
+            wasEqualOp=false;
         }
         if (digit.equals(".")) {
             if (numb.firstDot()) {
@@ -157,12 +158,15 @@ public class CalcLogic {
                     res.setNumber((float) (Math.pow(Double.parseDouble(secondNumb), Double.parseDouble(firstNumb))));
                     break;
             }
+            if (!stackEmpty) {
+                this.lastOpPriority = stack.peek().checkPriority();
+            } else this.lastOpPriority = 0;
             stack.push(res);
-            this.lastOpPriority = op.checkPriority();
-            setDispText();
+
         }
-        if (stackEmpty && !simplifyAll) {
-            stack.push(op);//!!!!!???
+        if ( !simplifyAll) {
+            stack.push(op);
+            this.lastOpPriority =op.checkPriority();
         }
     }
 
@@ -188,24 +192,31 @@ public class CalcLogic {
                 if (!numb.getNumber().isEmpty()) {
                     stack.push(makeNumb());
                     simplifyStack(new Operator("^"), true);
-                } else simplifyStack(new Operator("^"), true);
-
+                }
+                wasEqualOp=true;
             }
         } else if (numb.getNumber().isEmpty()) {
-            if (!stack.isEmpty()) {
-                if (stack.peek().isNumber()) {
+            if (!stack.isEmpty() && stack.peek().isNumber()) {
                     stack.push(op);
                     lastOpPriority = op.checkPriority();
-                }
+            } else { //when pushing operator twice
+                stack.pop();
+                stack.push(op);
+                lastOpPriority=op.checkPriority();
             }
         } else if (lastOpPriority >= op.checkPriority()) {
-            stack.push(makeNumb());
-            simplifyStack(op, false);
+
+                stack.push(makeNumb());
+                simplifyStack(op, false);
+
         } else if (lastOpPriority < op.checkPriority()) {
-            stack.push(makeNumb());
-            stack.push(op);
-            lastOpPriority = op.checkPriority();
-            setDispText();
+
+                stack.push(makeNumb());
+                stack.push(op);
+                lastOpPriority = op.checkPriority();
+
+
+
         }
     }
 }
